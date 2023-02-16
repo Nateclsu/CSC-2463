@@ -129,11 +129,6 @@ class WalkingAnimation {
 
   draw() {
 
-    // if (this.moving != 0)
-    //   this.u = this.currentFrame % this.animationLength;
-    // else
-    //   this.u = 0;
-
     this.u = (this.moving != 0) ? this.currentFrame % this.animationLength : this.u;
     push();
     translate(this.dx,this.dy);
@@ -141,8 +136,6 @@ class WalkingAnimation {
       rotate(90);
     scale(this.xDirection,1);
     
-
-    //rect(-26,-35,50,70);
 
     image(this.spritesheet,0,0,this.sw,this.sh,this.u*this.sw+this.offsetX,this.v*this.sh+this.offsetY,this.sw,this.sh);
     pop();
