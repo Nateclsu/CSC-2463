@@ -5,13 +5,14 @@ let sounds = new Tone.Players({
 
   "Anakin": "sounds/Anakin.mp3",
   "Obi-Wan": "sounds/ChosenOne.mp3",
-  "Vader": "sounds/Breathing.mp3"
+  "Vader": "sounds/Breathing.mp3",
+  "Father": "sounds/Father.mp3"
 
 })
 
 const delay = new Tone.FeedbackDelay("8n", 0.5);
 
-let soundNames = ["Anakin", "Obi-Wan", "Vader"];
+let soundNames = ["Anakin", "Obi-Wan", "Vader", "Father"];
 let buttons = [];
 
 let dSlider;
@@ -57,6 +58,13 @@ function setup() {
   buttons[2].style('color', 'white');
   buttons[2].mousePressed( () => buttonSound("Vader"));
 
+  buttons[3] = createButton(soundNames[3]);
+  buttons[3].position(200, 200);
+  buttons[3].style('width', '100px');
+  buttons[3].style('background-color', 'RGB(13,13,13)')
+  buttons[3].style('color', 'white');
+  buttons[3].mousePressed( () => buttonSound("Father"));
+  
   dSlider = createSlider(0., 1., 0.5, 0.05);
   dSlider.position(100, 500);
   dSlider.mouseReleased( () => {
