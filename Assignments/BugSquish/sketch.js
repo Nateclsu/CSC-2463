@@ -4,6 +4,8 @@ let walkingAnimation;
 
 let animations = [];
 
+let URL = "https://mbardin.github.io/PDM-resources/media/sound-samples/"
+
 const GameState = {
   Start: "Start",
   Playing: "Playing",
@@ -20,7 +22,6 @@ function setup() {
   createCanvas(400, 400);
   imageMode(CENTER);
   angleMode(DEGREES);
-
   reset();
 }
 
@@ -82,6 +83,7 @@ function keyPressed() {
   switch(game.state) {
     case GameState.Start:
       game.state = GameState.Playing;
+
       break;
     case GameState.GameOver:
       reset();
@@ -104,7 +106,6 @@ function mousePressed() {
       }
   }
 }
-
 
 class WalkingAnimation {
   constructor(spritesheet, sw, sh, dx, dy, animationLength, speed, framerate, vertical = false, offsetX = 0, offsetY = 0) {

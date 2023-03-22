@@ -59,8 +59,9 @@ const part = new Tone.Part((time, note) => {
 
 // start the transport and loop the sequence
 Tone.Transport.start();
-Tone.Transport.bpm.value += 200;
 part.loop = true;
+Tone.Transport.bpm.value += 200;
+
 
 function keyPressed() {
   if (keyCode === 32) {
@@ -75,7 +76,6 @@ function setup() {
 }
 
 function draw() {
-
   if (keyIsPressed && keyCode === 32 && img) {
     image(img, 10, -20, 380, 390);
   } 
