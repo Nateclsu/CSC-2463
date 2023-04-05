@@ -2,9 +2,30 @@ let spriteSheet;
 
 let walkingAnimation;
 
-let animations = [];
+let sounds = new Tone.Players({
+  squish: 'assets/squish.mp3',
+  miss: 'assets/miss.mp3',
+  startgame: 'assets/startgame.mp3'
+}).toDestination();
 
-let URL = "https://mbardin.github.io/PDM-resources/media/sound-samples/"
+const synth = new Tone.Synth();
+
+const volume = new Tone.Volume(-25).toDestination();
+synth.connect(volume);
+
+const sequence = new Tone.Sequence((time, note) => {
+  synth.triggerAttackRelease(note, "8n", time);
+}, ["C4", "E4", "G4", "B4"], "8n");
+
+sequence.start(0);
+
+Tone.Transport.scheduleRepeat(() => {
+  const index = Math.floor(Math.random() * sequence.values.length);
+  sequence.set(index, Tone.Frequency(Math.random() * 1000 + 200, "midi"));
+}, "4m");
+
+
+let animations = [];
 
 const GameState = {
   Start: "Start",
@@ -28,7 +49,7 @@ function setup() {
 function reset() {
   game.elapsedTime = 0;
   game.score = 0;
-  game.totalSprites = random(10,30);
+  game.totalSprites = random(25,35);
 
   animations = [];
   for(let i=0; i < game.totalSprites; i++) {
@@ -40,6 +61,7 @@ function draw() {
   switch(game.state) {
     case GameState.Playing:
       background(220);
+      Tone.Transport.start();
   
       for(let i=0; i < animations.length; i++) {
           animations[i].draw();
@@ -56,7 +78,7 @@ function draw() {
       break;
     case GameState.GameOver:
       game.maxScore = max(game.score,game.maxScore);
-
+      Tone.Transport.bpm.value = 150;
       background(0);
       fill(255);
       textSize(40);
@@ -83,7 +105,7 @@ function keyPressed() {
   switch(game.state) {
     case GameState.Start:
       game.state = GameState.Playing;
-
+      sounds.player('startgame').start();
       break;
     case GameState.GameOver:
       reset();
@@ -93,6 +115,7 @@ function keyPressed() {
 }
 
 function mousePressed() {
+  squished = false;
   switch(game.state) {
     case GameState.Playing:
       for (let i=0; i < animations.length; i++) {
@@ -100,9 +123,16 @@ function mousePressed() {
         if (contains) {
           if (animations[i].moving != 0) {
             animations[i].stop();
+            squished = true;
+            Tone.Transport.bpm.value += 5;
+            sounds.player('squish').start();
             game.score += 1;
           }
         } 
+      }
+      
+      if(GameState.Playing && !squished) {
+        sounds.player('miss').start();
       }
   }
 }
